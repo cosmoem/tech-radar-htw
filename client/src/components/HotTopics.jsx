@@ -275,7 +275,8 @@ export default class HotTopics extends React.Component {
           gesamtkommentaranzahl: this.getTotalCommentCountPerTechnology(name, radar, this.state.commentsAllSorted),
           radarAnzeigen: radar.charAt(0).toUpperCase() + radar.slice(1),
           radar: radar,
-          ring: this.getRingForTechnology(name, radar).charAt(0).toUpperCase() + this.getRingForTechnology(name, radar).slice(1),
+          ringAnzeigen: this.getRingForTechnology(name, radar).charAt(0).toUpperCase() + this.getRingForTechnology(name, radar).slice(1),
+          ring: this.getRingForTechnology(name, radar),
           lastComment: this.getLatestComment(name, radar),
           lastCommentAutor: this.getLatestComment(name, radar).autor,
           lastCommentText: this.shortenText(this.getLatestComment(name, radar).text),
@@ -423,7 +424,7 @@ export default class HotTopics extends React.Component {
                         <div className="column">
                             <div className="infos">
                                 <Link className="title" onClick={ () => this.openInfoOfBox(item)}>{item.technologie}</Link>
-                                <div>{item.ring} | {item.radarAnzeigen} </div>
+                                <div>{item.ringAnzeigen} | {item.radarAnzeigen} </div>
                                 <div className="autor">{item.lastCommentAutor}</div>
                                 <div className="meinung">{item.lastCommentMeinung}</div>
                             </div>
