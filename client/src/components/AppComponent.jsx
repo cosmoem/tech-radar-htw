@@ -150,7 +150,6 @@ export default class AppComponent extends React.Component {
 
                 <Switch>
                     <ProtectedRoute
-                        exact
                         path="/"
                         component={() => <RadarDataService data={javaJSON}/>}
                     />
