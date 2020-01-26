@@ -17,7 +17,7 @@ const RemoveButton = (props) => {
             clear
         </Icon>
     </Button>
-}
+};
 export default class HotTopics extends React.Component {
   constructor(props) {
     super(props);
@@ -35,7 +35,7 @@ export default class HotTopics extends React.Component {
       trending: new Array(({})),
       latest: new Array(({})),
     };
-      console.log(this)
+      console.log(this);
     this.getTotalCommentCountPerTechnology = this.getTotalCommentCountPerTechnology.bind(this);
     this.getAllTechnologies = this.getAllTechnologies.bind(this);
     this.withinTheLastXDays = this.withinTheLastXDays.bind(this);
@@ -273,15 +273,16 @@ export default class HotTopics extends React.Component {
         latest.push({
           technologie: name,
           gesamtkommentaranzahl: this.getTotalCommentCountPerTechnology(name, radar, this.state.commentsAllSorted),
-          radar: radar.charAt(0).toUpperCase() + radar.slice(1),
+          radarAnzeigen: radar.charAt(0).toUpperCase() + radar.slice(1),
+          radar: radar,
           ring: this.getRingForTechnology(name, radar).charAt(0).toUpperCase() + this.getRingForTechnology(name, radar).slice(1),
           lastComment: this.getLatestComment(name, radar),
           lastCommentAutor: this.getLatestComment(name, radar).autor,
           lastCommentText: this.shortenText(this.getLatestComment(name, radar).text),
           lastCommentMeinung: this.getLatestComment(name, radar).meinung,
           lastCommentTime: this.getLatestComment(name, radar).zeit,
-            name: name,
-            desc:this.getDescriptionForTechnologie(name,radar),
+          name: name,
+          desc:this.getDescriptionForTechnologie(name,radar),
         });
       }
     }
@@ -361,7 +362,7 @@ export default class HotTopics extends React.Component {
             clickedBlip: e,
             showBlipDetail: true
         })
-    }
+    };
 
     removeBlip() {
         this.setState({showBlipDetail: false})
@@ -422,7 +423,7 @@ export default class HotTopics extends React.Component {
                         <div className="column">
                             <div className="infos">
                                 <Link className="title" onClick={ () => this.openInfoOfBox(item)}>{item.technologie}</Link>
-                                <div>{item.ring} | {item.radar} </div>
+                                <div>{item.ring} | {item.radarAnzeigen} </div>
                                 <div className="autor">{item.lastCommentAutor}</div>
                                 <div className="meinung">{item.lastCommentMeinung}</div>
                             </div>
