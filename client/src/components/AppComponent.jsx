@@ -150,6 +150,7 @@ export default class AppComponent extends React.Component {
 
                 <Switch>
                     <ProtectedRoute
+                        exact
                         path="/"
                         component={() => <RadarDataService data={javaJSON}/>}
                     />
@@ -158,10 +159,12 @@ export default class AppComponent extends React.Component {
                         component={() => <RadarDataService data={javaJSON}/>}
                     />
                     <ProtectedRoute
+
                         path="/microsoft"
                         component={() => <RadarDataService data={msJSON}/>}
                     />
                     <ProtectedRoute
+
                         path="/javascript"
                         component={() => <RadarDataService data={jsJSON}/>}
                     />
@@ -169,7 +172,7 @@ export default class AppComponent extends React.Component {
                         path="/hottopics"
                         component={HotTopics}
                     />
-                    <ProtectedRoute path="/faq" component={FAQ}/>
+                    <ProtectedRoute exact path="/faq" component={FAQ}/>
                 </Switch>
             </Router>
         );
