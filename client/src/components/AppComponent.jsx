@@ -159,12 +159,10 @@ export default class AppComponent extends React.Component {
                         component={() => <RadarDataService data={javaJSON}/>}
                     />
                     <ProtectedRoute
-
                         path="/microsoft"
                         component={() => <RadarDataService data={msJSON}/>}
                     />
                     <ProtectedRoute
-
                         path="/javascript"
                         component={() => <RadarDataService data={jsJSON}/>}
                     />

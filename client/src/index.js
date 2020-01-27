@@ -10,17 +10,12 @@ import AppComponent from './components/AppComponent'
 import Login from './components/Login'
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
-import RadarDataService from "./components/RadarDataService";
-import javaJSON from "./components/java-radar";
 
 const routing = (
     <Router>
         <div>
             <PublicRoute restricted={true} path="/login" component={Login} />
             <ProtectedRoute exact path="/" component={AppComponent} />
-
-
-
         </div>
     </Router>
 )
