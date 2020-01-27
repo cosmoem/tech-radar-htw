@@ -172,7 +172,7 @@ export default class AppComponent extends React.Component {
                         path="/hottopics"
                         component={HotTopics}
                     />
-                    <ProtectedRoute exact path="/faq" component={FAQ}/>
+                    <ProtectedRoute  path="/faq" component={FAQ}/>
                 </Switch>
             </Router>
         );
