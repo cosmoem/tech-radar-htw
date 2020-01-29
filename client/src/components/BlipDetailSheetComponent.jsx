@@ -142,7 +142,6 @@ class BlipDetailSheetComponent extends React.Component {
             this.setState({
                 valid: true
             });
-            console.log(e.target.value)
         }
         this.setState({newMeinung: e.target.value});
     }
@@ -220,14 +219,11 @@ class BlipDetailSheetComponent extends React.Component {
                     var datesB = partsB[0].split('/');
                     var timeB = partsB[1].split(':');
                     var dateB = new Date('20' + datesB[2], datesB[1], datesB[0], timeB[0], timeB[1], timeB[2]);
-
                     return dateB - dateA;
                 });
-                console.log("Kommentare gleicher User: ", commentsWithSameName);
                 commentsOneCommentPerUser.push(commentsWithSameName[0]);
             }
         });
-        console.log("Kommentare pro User: ", commentsOneCommentPerUser);
         return commentsOneCommentPerUser;
     }
 
@@ -238,7 +234,6 @@ class BlipDetailSheetComponent extends React.Component {
         }).length > 0 ? commentsOneCommentPerUser.filter(comment => {
             return comment.meinung === this.state.meinungArr[value - 1];
         }).length : 0;
-        console.log("Anzahl pro Meinung: ", countValue);
         return countValue;
     }
 
@@ -254,7 +249,6 @@ class BlipDetailSheetComponent extends React.Component {
         var countValue = this.getCount(value);
         var count = this.getTeilnehmer().length;
         var width = (countValue * 100 / count) + '%';
-        console.log(count);
         return {
             width: width
         };

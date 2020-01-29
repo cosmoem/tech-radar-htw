@@ -7,7 +7,17 @@ import "../static/css/hotTopicsStyles.scss";
 import Icon from "@material-ui/core/Icon";
 import Tooltip from "@material-ui/core/Tooltip";
 import {withStyles} from "@material-ui/core/styles";
+import Link from "@material-ui/core/Link";
+import {Button, Slide} from "@material-ui/core";
+import BlipDetailSheetComponent from './BlipDetailSheetComponent';
 
+const RemoveButton = (props) => {
+    return <Button className="closeButton" onClick={props.onClick}>
+        <Icon>
+            clear
+        </Icon>
+    </Button>
+};
 export default class HotTopics extends React.Component {
   constructor(props) {
     super(props);
@@ -25,6 +35,7 @@ export default class HotTopics extends React.Component {
       trending: new Array(({})),
       latest: new Array(({})),
     };
+      console.log(this);
     this.getTotalCommentCountPerTechnology = this.getTotalCommentCountPerTechnology.bind(this);
     this.getAllTechnologies = this.getAllTechnologies.bind(this);
     this.withinTheLastXDays = this.withinTheLastXDays.bind(this);
@@ -34,6 +45,7 @@ export default class HotTopics extends React.Component {
     this.getCount = this.getCount.bind(this);
     this.getLatestComment = this.getLatestComment.bind(this);
     this.shortenText = this.shortenText.bind(this);
+    this.getDescriptionForTechnologie=this.getDescriptionForTechnologie.bind(this);
     this.getAllComments = async () => {
       const data = await commentService.getByRadarType();
       const commentsAllSorted = [];
@@ -152,6 +164,8 @@ export default class HotTopics extends React.Component {
         ring: javaJSON[i].ring,
         ringAnzeigen: javaJSON[i].ring.charAt(0).toUpperCase() + javaJSON[i].ring.slice(1),
         teilnehmer: this.getTeilnehmer(this.state.commentsAllSorted, javaJSON[i].name, "java").length,
+          desc: javaJSON[i].desc,
+          name: javaJSON[i].name
       });
     }
     for (var j = 0; j < jsJSON.length; j++) {
@@ -164,6 +178,8 @@ export default class HotTopics extends React.Component {
         ring: jsJSON[j].ring,
         ringAnzeigen: jsJSON[j].ring.charAt(0).toUpperCase() + jsJSON[j].ring.slice(1),
         teilnehmer: this.getTeilnehmer(this.state.commentsAllSorted, jsJSON[j].name, "javascript").length,
+          desc: jsJSON[j].desc,
+          name: jsJSON[j].name,
       });
     }
     for (var k = 0; k < msJSON.length; k++) {
@@ -175,7 +191,9 @@ export default class HotTopics extends React.Component {
         radarAnzeigen: "Microsoft",
         ring: msJSON[k].ring,
         ringAnzeigen: msJSON[k].ring.charAt(0).toUpperCase() + msJSON[k].ring.slice(1),
-        teilnehmer: this.getTeilnehmer(this.state.commentsAllSorted, msJSON[k].name, "microsoft").length
+        teilnehmer: this.getTeilnehmer(this.state.commentsAllSorted, msJSON[k].name, "microsoft").length,
+          desc: msJSON[k].desc,
+          name: msJSON[k].name,
       });
     }
     this.setState({
@@ -226,6 +244,24 @@ export default class HotTopics extends React.Component {
     return comments[0]
   }
 
+  getDescriptionForTechnologie(tech,radar) {
+      var json;
+      if (radar === "java") {
+          json = javaJSON
+      }
+      else if (radar === "javascript") {
+          json = jsJSON;
+      }
+      else {
+          json = msJSON;
+      }
+      for (var i = 0; i < json.length; i++) {
+          if (json[i].name) {
+              return json[i].desc;
+          }
+      }
+  }
+
   getTop5LatestDiscussions() {
     const discussedTechs = [];
     const latest = [];
@@ -237,13 +273,17 @@ export default class HotTopics extends React.Component {
         latest.push({
           technologie: name,
           gesamtkommentaranzahl: this.getTotalCommentCountPerTechnology(name, radar, this.state.commentsAllSorted),
-          radar: radar.charAt(0).toUpperCase() + radar.slice(1),
-          ring: this.getRingForTechnology(name, radar).charAt(0).toUpperCase() + this.getRingForTechnology(name, radar).slice(1),
+          radarAnzeigen: radar.charAt(0).toUpperCase() + radar.slice(1),
+          radar: radar,
+          ringAnzeigen: this.getRingForTechnology(name, radar).charAt(0).toUpperCase() + this.getRingForTechnology(name, radar).slice(1),
+          ring: this.getRingForTechnology(name, radar),
           lastComment: this.getLatestComment(name, radar),
           lastCommentAutor: this.getLatestComment(name, radar).autor,
           lastCommentText: this.shortenText(this.getLatestComment(name, radar).text),
           lastCommentMeinung: this.getLatestComment(name, radar).meinung,
-          lastCommentTime: this.getLatestComment(name, radar).zeit
+          lastCommentTime: this.getLatestComment(name, radar).zeit,
+          name: name,
+          desc:this.getDescriptionForTechnologie(name,radar),
         });
       }
     }
@@ -318,7 +358,16 @@ export default class HotTopics extends React.Component {
           }
           return balken;
       }
+    openInfoOfBox = (e) => {
+        this.setState({
+            clickedBlip: e,
+            showBlipDetail: true
+        })
+    };
 
+    removeBlip() {
+        this.setState({showBlipDetail: false})
+    }
 
   render() {
       const CustomizeTooltip = withStyles({
@@ -328,7 +377,15 @@ export default class HotTopics extends React.Component {
               margin:"-35px",
           }
       })(Tooltip);
-    return (
+      const showBlipDetail = this.state.showBlipDetail ? (
+          <Slide in={true} direction="down" mountOnEnter unmountOnExit>
+              <div className="blip-overlay">
+                  <BlipDetailSheetComponent  {...this.state.clickedBlip}
+                                             element={<RemoveButton onClick={() => {this.removeBlip(); }} />}
+                  />
+              </div>
+          </Slide> ) : '';
+      return (
         <div className="container">
             <div className="row">
                 <CustomizeTooltip className="hover_trending" title="Diskussionen mit den meisten neuen Kommentaren innerhalb der letzten 2 Monate" aria-label="hover_trending" placement="bottom" arrow >
@@ -348,8 +405,8 @@ export default class HotTopics extends React.Component {
                        </div>
                        <div className="column">
                               <div className="trending">
-                                 <div className="title">{item.technologie}</div>
-                                 <div>{item.ringAnzeigen} | {item.radarAnzeigen} </div>
+                                 <Link className="title" onClick={ () => this.openInfoOfBox(item)}>{item.technologie}</Link>
+                                 <div>{item.ringAnzeigen} | {item.radarAnzeigen}</div>
                                  <div className="autor">Teilnehmeranzahl: {item.teilnehmer}</div>
                                   <div className="voting">{this.getBalken(item)}</div>
                               </div>
@@ -366,8 +423,8 @@ export default class HotTopics extends React.Component {
                         </div>
                         <div className="column">
                             <div className="infos">
-                                <div className="title">{item.technologie}</div>
-                                <div>{item.ring} | {item.radar} </div>
+                                <Link className="title" onClick={ () => this.openInfoOfBox(item)}>{item.technologie}</Link>
+                                <div>{item.ringAnzeigen} | {item.radarAnzeigen} </div>
                                 <div className="autor">{item.lastCommentAutor}</div>
                                 <div className="meinung">{item.lastCommentMeinung}</div>
                             </div>
@@ -377,6 +434,7 @@ export default class HotTopics extends React.Component {
                 })}
             </div>
             </div>
+            {showBlipDetail}
         </div>
     );
   }
